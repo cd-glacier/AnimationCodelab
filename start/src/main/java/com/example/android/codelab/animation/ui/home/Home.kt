@@ -17,9 +17,7 @@
 package com.example.android.codelab.animation.ui.home
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -407,10 +405,16 @@ private fun HomeTabIndicator(
     tabPositions: List<TabPosition>,
     tabPage: TabPage
 ) {
-    // TODO 4: Animate these value changes.
-    val indicatorLeft = tabPositions[tabPage.ordinal].left
-    val indicatorRight = tabPositions[tabPage.ordinal].right
-    val color = if (tabPage == TabPage.Home) Purple700 else Green800
+    val transition = updateTransition(tabPage)
+    val indicatorLeft by transition.animateDp { page ->
+        tabPositions[page.ordinal].left
+    }
+    val indicatorRight by transition.animateDp { page ->
+        tabPositions[page.ordinal].right
+    }
+    val color by transition.animateColor { page ->
+        if (page == TabPage.Home) Purple700 else Green800
+    }
     Box(
         Modifier
             .fillMaxSize()
